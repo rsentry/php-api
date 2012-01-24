@@ -17,7 +17,8 @@ else
 //if you pass an array, will do a search
 $salesHeader = $api->getSalesSheet(array(
 	'status'=>'open',
-	'sort'=>'sales_date-|status',
+	'sales_date' => '07-00-0000',
+	'sort'=>'sales_date-|status+',
 	'limit'=> '5')
 );
 if($salesHeader === false)

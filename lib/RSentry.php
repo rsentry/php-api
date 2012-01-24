@@ -51,6 +51,18 @@ class RSentry
 				$options[CURLOPT_POSTFIELDS] = http_build_query($params, null, '&');
 			}
 		}
+		elseif($method=='put')
+		{
+			$options[CURLOPT_CUSTOMREQUEST] = 'PUT';
+			if(count($params) > 0)
+			{
+				$options[CURLOPT_POSTFIELDS] = http_build_query($params, null, '&');
+			}
+		}
+		elseif($method=='delete')
+		{
+			$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+		}
 		else //not valid method
 		{
 			$this->_addError('Invalid method:' . $method);
@@ -139,14 +151,24 @@ class RSentry
 		}
 		return json_decode($return);
 	}		
-	public function deleteSalesSheet($values)
+	public function deleteSalesSheet($id)
 	{
-		$return = $this->_requestResource('sales.json','delete',$values);
+		$return = $this->_requestResource("sales/$id.json",'delete');
 		if ($return === false)
 		{
 			return false;
 		}
 		return json_decode($return);
 	}		
+
+	public function updateSalesSheet($id, $values)
+	{
+		$return = $this->_requestResource("sales/$id.json",'put', $values);
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
 }
 ?>
