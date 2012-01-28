@@ -22,7 +22,7 @@ class RSentry
 
 	private function _requestResource($loc,$method='get',$params=array())
 	{
-		//empty out erros
+		//empty out errors
 		$this->errors = array();
 		//if apikey doesn't exist throw error
 		if($this->apikey == '')
@@ -62,6 +62,7 @@ class RSentry
 		elseif($method=='delete')
 		{
 			$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+			$loc = $loc . '?' . http_build_query($params, null, '&');
 		}
 		else //not valid method
 		{
@@ -122,8 +123,6 @@ class RSentry
 		}
 		//return message body
 		return $msgbody;
-
-		
 	}
 
 	public function getSalesSheet($values)
@@ -170,5 +169,81 @@ class RSentry
 		}
 		return json_decode($return);
 	}
+
+	public function createSalesDetail($sales_id, $values)
+	{
+		$return = $this->_requestResource("sales/$sales_id/details.json",'post', $values);
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function getSalesDetail($sales_id,$values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource("sales/$sales_id/details.json",'get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("sales/$sales_id/details/$values.json",'get');
+		}
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}		
+	public function getSalesDetailByPlu($sales_id, $plu)
+	{
+		$return = $this->_requestResource("sales/$sales_id/details/$plu.json?pluoverride=true",'get');
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function getSalesDetailByCategory($sales_id, $supers=false)
+	{
+		$args = '';
+		if($supers===true)
+		{
+			$args = '?supers=true';
+		}
+		$return = $this->_requestResource("sales/$sales_id/details/categories.json$args",'get');
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function updateSalesDetail($sales_id,$mixed_id, $values, $pluoverride=false)
+	{
+		if($pluoverride === true)
+		{
+			$values['pluoverride'] = 'true';
+		}
+		$return = $this->_requestResource("sales/$sales_id/details/$mixed_id.json",'put', $values);
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function deleteSalesDetail($sales_id,$mixed_id,$pluoverride=false)
+	{
+		$args = '';
+		if($pluoverride === true)
+		{
+			$args = '?pluoverride=true';
+		}
+		$return = $this->_requestResource("sales/$sales_id/details/$mixed_id.json$args",'delete');
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}		
 }
 ?>
