@@ -1,5 +1,5 @@
 <?php
-require_once('../lib/RSentry.php');
+require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
 //only fields required are sales_date, location is based off of api key
 $salesHeader = $api->createSalesSheet(array(

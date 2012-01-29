@@ -1,5 +1,5 @@
 <?php
-require_once('../lib/RSentry.php');
+require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
 $values = array('quantity'=>'9');
 $sales_id = '811b1648-39dd-49e8-965a-ffd4c040e806';

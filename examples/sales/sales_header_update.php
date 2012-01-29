@@ -1,5 +1,5 @@
 <?php
-require_once('../lib/RSentry.php');
+require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
 $values = array('status'=>'closed');
 $salesHeader = $api->updateSalesSheet('0862aa28-306d-4f38-85ae-245966349443', $values);

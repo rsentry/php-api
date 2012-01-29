@@ -245,5 +245,39 @@ class RSentry
 		}
 		return json_decode($return);
 	}		
+	public function getItems($values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource('items.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("items/$values.json",'get');
+		}
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function getItemsUOMs($items_id,$values)
+	{
+		$return = $this->_requestResource("items/$items_id/uoms.json",'get',$values);
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function getItemsCosts($items_id,$values)
+	{
+		$return = $this->_requestResource("items/$items_id/costs.json",'get',$values);
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
 }
 ?>

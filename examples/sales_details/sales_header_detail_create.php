@@ -1,5 +1,5 @@
 <?php
-require_once('../lib/RSentry.php');
+require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
 $salesDetail = $api->createSalesDetail('811b1648-39dd-49e8-965a-ffd4c040e806',array(
 	'plu_num' => 1234,

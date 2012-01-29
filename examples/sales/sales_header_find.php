@@ -1,5 +1,5 @@
 <?php
-require_once('../lib/RSentry.php');
+require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
 //if you just pass an id, will request a lookup by id
 $salesHeader = $api->getSalesSheet('0862aa28-306d-4f38-85ae-245966349443');
@@ -18,7 +18,7 @@ else
 $salesHeader = $api->getSalesSheet(array(
 	'status'=>'open',
 	'sales_date' => '07-00-0000',
-	'sort'=>'sales_date-|status+',
+	'sort'=>'sales_date-|status',
 	'limit'=> '5')
 );
 if($salesHeader === false)
