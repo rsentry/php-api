@@ -279,5 +279,37 @@ class RSentry
 		}
 		return json_decode($return);
 	}
+	public function getCategories($values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource('categories.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("categories/$values.json",'get');
+		}
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
+	public function getSuperCategories($values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource('super_categories.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("super_categories/$values.json",'get');
+		}
+		if ($return === false)
+		{
+			return false;
+		}
+		return json_decode($return);
+	}
 }
 ?>
