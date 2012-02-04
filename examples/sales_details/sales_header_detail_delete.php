@@ -1,32 +1,27 @@
 <?php
 require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
-$sales_id = '811b1648-39dd-49e8-965a-ffd4c040e806';
-//using id
-$salesDetail = $api->deleteSalesDetail($sales_id,'61ab8678-7a46-4938-8ff6-9fecef11e898');
-if($salesDetail === false)
+$sales_id = 'f17253ed-7a51-434d-a6ff-1f31ded10a92';
+try
 {
-	foreach($api->errors() as $error)
-	{
-		echo $error . "\n";
-	}
-}
-else
-{
+	//using id
+	$salesDetail = $api->deleteSalesDetail($sales_id,'5be1935f-9804-4ecb-a6ed-b85109777cdd');
 	echo "Sales detail delete successful!\n";
 }
-//using plu
-$salesDetail = $api->deleteSalesDetail($sales_id,'12345', true);
-if($salesDetail === false)
+catch (RSentryException $e)
 {
-	foreach($api->errors() as $error)
-	{
-		echo $error . "\n";
-	}
+	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
-else
+
+try
 {
+	//using plu
+	$salesDetail = $api->deleteSalesDetail($sales_id,'12345', true);
 	echo "Sales detail delete successful!\n";
+}
+catch (RSentryException $e)
+{
+	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
 
 ?>

@@ -4,8 +4,8 @@ $api = new RSentry('testkey');
 try
 {
 	//if you just pass an id, will request a lookup by id
-	$cat = $api->getCategories('250');
-	echo "Category found: " . $cat->name . " \n";
+	$cat = $api->getSalesCategories('198');
+	echo "Sales Category found: " . $cat->name . " \n";
 }
 catch (RSentryException $e)
 {
@@ -15,11 +15,11 @@ catch (RSentryException $e)
 try
 {
 	//if you pass an array, will do a search
-	$cats = $api->getCategories(array(
-		'name'=>'food',
+	$cats = $api->getSalesCategories(array(
+		'name'=>'wine',
 		'limit'=> '5')
 	);
-	foreach($cats->categories as $cat)
+	foreach($cats->salescategories as $cat)
 	{
 		echo $cat->name . "\n";
 	}

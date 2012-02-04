@@ -10,16 +10,6 @@ class RSentry
 		$this->apikey = $apikey;
 	}
 
-	private function _addError($msg)
-	{
-		$this->errors[] = $msg;
-	}
-
-	public function errors()
-	{
-		return $this->errors;
-	}
-
 	private function _requestResource($loc,$method='get',$params=array())
 	{
 		//empty out errors
@@ -27,7 +17,7 @@ class RSentry
 		//if apikey doesn't exist throw error
 		if($this->apikey == '')
 		{
-			$this->_addError('Invalid API Key');
+			throw new RSentryException('Invalid API Key',400);
 		}
 		//setup curl call
 		$curl = curl_init();
@@ -66,8 +56,7 @@ class RSentry
 		}
 		else //not valid method
 		{
-			$this->_addError('Invalid method:' . $method);
-			return false;
+			throw new RSentryException('Invalid method:' . $method,400);
 		}
 
 		//set curl options
@@ -90,16 +79,15 @@ class RSentry
 				case CURLE_COULDNT_CONNECT:
 				case CURLE_COULDNT_RESOLVE_HOST:
 				case CURLE_OPERATION_TIMEOUTED:
-					$this->_addError("Could not connect to RestaurantSentry.com at '$this->target'.  Please confirm your internet connection and try again.  You can check RestaurantSentry.com's service status at https://twitter.com/rsentry, or let us know at support@restaurantsentry.com.");
+					throw new RSentryException("Could not connect to RestaurantSentry.com at '$this->target'.  Please confirm your internet connection and try again.  You can check RestaurantSentry.com's service status at https://twitter.com/rsentry, or let us know at support@restaurantsentry.com.",400);
 					break;
 				case CURLE_SSL_CACERT:
 				case CURLE_SSL_PEER_CERTIFICATE:
-					$this->_addError("Could not verify SSL certificate.  If this problem persists, let us know at support@restaurantsentry.com.");
+					throw new RSentryException("Could not verify SSL certificate.  If this problem persists, let us know at support@restaurantsentry.com.",400);
 					break;
 				default:
-					$this->_addError("Unexpected error communicating with RestaurantSentry.  Let us know if this problem continues at support@restaurantsentry.com.");
+					throw new RSentryException("Unexpected error communicating with RestaurantSentry.  Let us know if this problem continues at support@restaurantsentry.com.",400);
 			}
-			return false;
 		}
 
 		//get http status code
@@ -110,14 +98,20 @@ class RSentry
 			$messages = json_decode($msgbody);
 			if($messages == null)
 			{
-				$this->_addError('Message id malformed');
+				throw new RSentryException('Message ID Malformed',$httpcode);
 			}
 			else
 			{
+				$msg = '';
 				foreach ($messages->messages as $message)
 				{
-					$this->_addError($message->msg);
+					if($msg != '')
+					{
+						$msg .= "\n";
+					}
+					$msg .= $message->msg;
 				}
+				throw new RSentryException($msg,$httpcode);
 			}
 			return false;
 		}
@@ -135,48 +129,28 @@ class RSentry
 		{
 			$return = $this->_requestResource("sales/$values.json",'get');
 		}
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}		
 	public function createSalesSheet($values)
 	{
 		$return = $this->_requestResource('sales.json','post',$values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}		
 	public function deleteSalesSheet($id)
 	{
 		$return = $this->_requestResource("sales/$id.json",'delete');
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}		
 
 	public function updateSalesSheet($id, $values)
 	{
 		$return = $this->_requestResource("sales/$id.json",'put', $values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 
 	public function createSalesDetail($sales_id, $values)
 	{
 		$return = $this->_requestResource("sales/$sales_id/details.json",'post', $values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function getSalesDetail($sales_id,$values)
@@ -189,19 +163,11 @@ class RSentry
 		{
 			$return = $this->_requestResource("sales/$sales_id/details/$values.json",'get');
 		}
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}		
 	public function getSalesDetailByPlu($sales_id, $plu)
 	{
 		$return = $this->_requestResource("sales/$sales_id/details/$plu.json?pluoverride=true",'get');
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function getSalesDetailByCategory($sales_id, $supers=false)
@@ -212,10 +178,7 @@ class RSentry
 			$args = '?supers=true';
 		}
 		$return = $this->_requestResource("sales/$sales_id/details/categories.json$args",'get');
-		if ($return === false)
-		{
-			return false;
-		}
+		var_dump($return);
 		return json_decode($return);
 	}
 	public function updateSalesDetail($sales_id,$mixed_id, $values, $pluoverride=false)
@@ -225,10 +188,6 @@ class RSentry
 			$values['pluoverride'] = 'true';
 		}
 		$return = $this->_requestResource("sales/$sales_id/details/$mixed_id.json",'put', $values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function deleteSalesDetail($sales_id,$mixed_id,$pluoverride=false)
@@ -239,10 +198,6 @@ class RSentry
 			$args = '?pluoverride=true';
 		}
 		$return = $this->_requestResource("sales/$sales_id/details/$mixed_id.json$args",'delete');
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}		
 	public function getItems($values)
@@ -255,28 +210,16 @@ class RSentry
 		{
 			$return = $this->_requestResource("items/$values.json",'get');
 		}
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function getItemsUOMs($items_id,$values)
 	{
 		$return = $this->_requestResource("items/$items_id/uoms.json",'get',$values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function getItemsCosts($items_id,$values)
 	{
 		$return = $this->_requestResource("items/$items_id/costs.json",'get',$values);
-		if ($return === false)
-		{
-			return false;
-		}
 		return json_decode($return);
 	}
 	public function getCategories($values)
@@ -288,10 +231,6 @@ class RSentry
 		else
 		{
 			$return = $this->_requestResource("categories/$values.json",'get');
-		}
-		if ($return === false)
-		{
-			return false;
 		}
 		return json_decode($return);
 	}
@@ -305,11 +244,24 @@ class RSentry
 		{
 			$return = $this->_requestResource("super_categories/$values.json",'get');
 		}
-		if ($return === false)
+		return json_decode($return);
+	}
+	public function getSalesCategories($values)
+	{
+		if(is_array($values))
 		{
-			return false;
+			$return = $this->_requestResource('sales_categories.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("sales_categories/$values.json",'get');
 		}
 		return json_decode($return);
 	}
 }
+
+//error lib
+require(dirname(__FILE__) . '/RSentry/rsentry_error.php');
+
+//eventually separate resources
 ?>

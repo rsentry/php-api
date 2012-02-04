@@ -1,34 +1,29 @@
 <?php
 require_once('../../lib/RSentry.php');
 $api = new RSentry('testkey');
-$values = array('quantity'=>'9');
-$sales_id = '811b1648-39dd-49e8-965a-ffd4c040e806';
-//using id
-$salesDetail = $api->updateSalesDetail($sales_id,'61ab8678-7a46-4938-8ff6-9fecef11e898', $values);
-if($salesDetail === false)
+$sales_id = '780dea11-ea9d-454f-8027-5d4f413e0833';
+try
 {
-	foreach($api->errors() as $error)
-	{
-		echo $error . "\n";
-	}
-}
-else
-{
+	$values = array('quantity'=>'9');
+	//using id
+	$salesDetail = $api->updateSalesDetail($sales_id,'83e06af6-72a6-4812-b8c1-91f82effed01', $values);
 	echo "Sales detail new quantity is:" . $salesDetail->quantity . "\n";
 }
-//using plu
-$values = array('quantity'=>'11');
-$salesDetail = $api->updateSalesDetail($sales_id,'1234', $values, true);
-if($salesDetail === false)
+catch (RSentryException $e)
 {
-	foreach($api->errors() as $error)
-	{
-		echo $error . "\n";
-	}
+	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
-else
+
+try
 {
+	//using plu
+	$values = array('quantity'=>'11');
+	$salesDetail = $api->updateSalesDetail($sales_id,'1234', $values, true);
 	echo "Sales detail new quantity is:" . $salesDetail->quantity . "\n";
+}
+catch (RSentryException $e)
+{
+	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
 
 ?>
