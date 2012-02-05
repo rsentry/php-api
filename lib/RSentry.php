@@ -258,6 +258,37 @@ class RSentry
 		}
 		return json_decode($return);
 	}
+	public function getPrepItems($values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource('prep_items.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("prep_items/$values.json",'get');
+		}
+		return json_decode($return);
+	}
+	public function getPrepItemsUOMs($prep_items_id,$value='')
+	{
+		if($value=='')
+		{
+			$return = $this->_requestResource("prep_items/$prep_items_id/uoms.json",'get');
+		}
+		else
+		{
+			$return = $this->_requestResource("prep_items/$prep_items_id/uoms/$value.json",'get');
+		}
+		var_dump($return);
+		return json_decode($return);
+	}
+	public function getPrepItemsCosts($prep_items_id)
+	{
+		$return = $this->_requestResource("prep_items/$prep_items_id/cost.json",'get',array());
+		var_dump($return);
+		return json_decode($return);
+	}
 }
 
 //error lib
