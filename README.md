@@ -27,4 +27,4 @@ A simple example:
 
 ##Documentation
 
-For more information and the most up-to-date documentation, visit [developer.restaurantsentry.com][http://developer.restaurantsentry.com] .
+For more information and the most up-to-date documentation, visit [developer.restaurantsentry.com](http://developer.restaurantsentry.com) .
