@@ -270,6 +270,18 @@ class RSentry
 		}
 		return json_decode($return);
 	}
+	public function getPrepItemsDetails($prep_items_id,$value='')
+	{
+		if($value=='')
+		{
+			$return = $this->_requestResource("prep_items/$prep_items_id/details.json",'get');
+		}
+		else
+		{
+			$return = $this->_requestResource("prep_items/$prep_items_id/details/$value.json",'get');
+		}
+		return json_decode($return);
+	}
 	public function getPrepItemsUOMs($prep_items_id,$value='')
 	{
 		if($value=='')
@@ -281,8 +293,8 @@ class RSentry
 			$return = $this->_requestResource("prep_items/$prep_items_id/uoms/$value.json",'get');
 		}
 		var_dump($return);
-		return json_decode($return);
 	}
+	//NEED TO FINISH ONCE API UPDATED
 	public function getPrepItemsCosts($prep_items_id)
 	{
 		$return = $this->_requestResource("prep_items/$prep_items_id/cost.json",'get',array());

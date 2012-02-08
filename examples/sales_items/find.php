@@ -4,25 +4,24 @@ $api = new RSentry('testkey');
 //if you just pass an id, will request a lookup by id
 try
 {
-	$prepitem = $api->getPrepItems('5af926d8-3c28-4509-881b-6fdf8e542ef7');
-	echo "Prep Item found: " . $prepitem->name . " \n";
+	$salesitem = $api->getSalesItems('5af926d8-3c28-4509-881b-6fdf8e542ef7');
+	echo "Sales Item found: " . $salesitem->name . " \n";
 }
 catch (RSentryException $e)
 {
 	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
-
 try
 {
 	//if you pass an array, will do a search
-	$prepitems = $api->getPrepItems(array(
+	$salesitems = $api->getPrepItems(array(
 		'status'=>'active',
 		'sort'=>'name-|status',
 		'limit'=> '5')
 	);
-	foreach($prepitems->prepitems as $prepitem)
+	foreach($salesitems->prepitems as $salesitem)
 	{
-		echo $prepitem->name . "\n";
+		echo $salesitem->name . "\n";
 	}
 }
 catch (RSentryException $e)
@@ -30,3 +29,5 @@ catch (RSentryException $e)
 	echo "Exception: {$e->getMessage()} code: {$e->getCode()}\n";
 }
 ?>
+
+
