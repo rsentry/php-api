@@ -15,7 +15,6 @@ catch (RSentryException $e)
 
 try
 {
-	//if you pass an array, will do a search
 	$prepitemdetails = $api->getPrepItemsDetails($prep_item_id);
 	foreach($prepitemdetails->prepitemsdetails as $prepitemdetail)
 	{

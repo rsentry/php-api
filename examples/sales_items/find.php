@@ -4,7 +4,7 @@ $api = new RSentry('testkey');
 //if you just pass an id, will request a lookup by id
 try
 {
-	$salesitem = $api->getSalesItems('5af926d8-3c28-4509-881b-6fdf8e542ef7');
+	$salesitem = $api->getSalesItems('5f3602b7-707f-40e2-b4c3-1dd7a13ed4f1');
 	echo "Sales Item found: " . $salesitem->name . " \n";
 }
 catch (RSentryException $e)
@@ -14,12 +14,12 @@ catch (RSentryException $e)
 try
 {
 	//if you pass an array, will do a search
-	$salesitems = $api->getPrepItems(array(
+	$salesitems = $api->getSalesItems(array(
 		'status'=>'active',
-		'sort'=>'name-|status',
+		'sort'=>'name-',
 		'limit'=> '5')
 	);
-	foreach($salesitems->prepitems as $salesitem)
+	foreach($salesitems->salesitems as $salesitem)
 	{
 		echo $salesitem->name . "\n";
 	}

@@ -301,6 +301,38 @@ class RSentry
 		var_dump($return);
 		return json_decode($return);
 	}
+	public function getSalesItems($values)
+	{
+		if(is_array($values))
+		{
+			$return = $this->_requestResource('sales_items.json','get',$values);
+		}
+		else
+		{
+			$return = $this->_requestResource("sales_items/$values.json",'get');
+		}
+		return json_decode($return);
+	}
+	public function getSalesItemsDetails($sales_item_id,$value='')
+	{
+		if($value=='')
+		{
+			$return = $this->_requestResource("sales_items/$sales_item_id/details.json",'get');
+		}
+		else
+		{
+			$return = $this->_requestResource("sales_items/$sales_item_id/details/$value.json",'get');
+		}
+		var_dump($return);
+		return json_decode($return);
+	}
+	//NEED TO FINISH ONCE API UPDATED
+	public function getSalesItemsCost($prep_items_id)
+	{
+		$return = $this->_requestResource("prep_items/$prep_items_id/cost.json",'get',array());
+		var_dump($return);
+		return json_decode($return);
+	}
 }
 
 //error lib
